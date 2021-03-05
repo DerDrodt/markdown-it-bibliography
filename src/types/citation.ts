@@ -10,9 +10,10 @@ export interface CiteItem {
 
 export interface Citation {
   citationItems: CiteItem[];
+  key: string;
   properties?: {
     noteIndex: number;
-    citationID?: string;
-    sortedItems?: any;
   };
+  citationID?: string;
+  sortedItems?: any;
 }

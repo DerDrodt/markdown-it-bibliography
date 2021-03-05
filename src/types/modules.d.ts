@@ -60,13 +60,13 @@ declare module "citeproc" {
       citation: Citation,
       citationsPre: CitationIdNoteNumPair,
       citationsPost: CitationIdNoteNumPair,
-      format: "html" | "text" | "rtf",
+      format?: "html" | "text" | "rtf",
     ): string;
     makeCitationCluster(idList: (string | number)[]): string;
     makeBibliography(
       filter?: (string | number)[],
     ): [FormattingParams, string[]];
   }
-  const CSL: any;
+  const CSL: { Engine: typeof Engine };
   export default CSL;
 }

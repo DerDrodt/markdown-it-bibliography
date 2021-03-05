@@ -11,7 +11,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "biblatex-csl-converter-ts": "^1.0.3",
+    "biblatex-csl-converter-ts": "^1.0.4",
     "citeproc": "^2.4.59",
     "locale-de-de": "^0.0.2",
     "locale-en-gb": "^0.0.2",

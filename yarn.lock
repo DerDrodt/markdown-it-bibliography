@@ -36,10 +36,10 @@ argparse@^2.0.1:
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
-biblatex-csl-converter-ts@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/biblatex-csl-converter-ts/-/biblatex-csl-converter-ts-1.0.3.tgz#fc457ca4784a9fada71e5cb9bd7514b79f4d8449"
-  integrity sha512-pbnUrLQphD8FrREsxR3WPTcEG+JyXKd5QUrhx2vubE6pc/naGZmx3OMMNZ7Jt4urspZfD6esFZhpq7zAL6Xadw==
+biblatex-csl-converter-ts@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/biblatex-csl-converter-ts/-/biblatex-csl-converter-ts-1.0.4.tgz#7b1ca51b8257763372552157840da3cd4ff955a3"
+  integrity sha512-XMY6ZC48kPJp8/7tAaqvQfYlvQouDdrTOOrt1Fg4qX9wz0lNA7EpJc/7/0jKkAoprx2NI9NT/dY+11bn0Le7rw==
 
 citeproc@^2.4.59:
   version "2.4.59"

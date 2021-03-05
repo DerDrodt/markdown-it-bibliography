@@ -3,7 +3,7 @@ import fs from "fs";
 import { BibLatexParser, CSLExporter } from "biblatex-csl-converter-ts";
 import { STYLES, LOCALES } from "./const.js";
 import { CSLBibliography, Format, Options } from "./types/bibliography.js";
-import citations, { citationsPlugin } from "./citations.js";
+import citations from "./citations.js";
 
 import MdIt from "markdown-it";
 
@@ -27,7 +27,9 @@ const cslFromBibLatex = (
 ): [CSLBibliography, Map<string, string>] => {
   const parsed = new BibLatexParser(biblatex).parse();
   for (const error of parsed.errors) {
-    throw new Error(`Encountered error while parsing biblatex: ${error}`);
+    throw new Error(
+      `Encountered error while parsing biblatex: ${JSON.stringify(error)}`,
+    );
   }
   const idToKey = new Map<string, string>();
   for (const id in parsed.entries) {
@@ -73,7 +75,7 @@ const getCSLJson = (
 
 export default function bibliography(
   pathToBib: string,
-  { style = "chicago", locale = "en-us" }: Options = {},
+  { style = "chicago", locale = "en-us", lang }: Options = {},
 ) {
   const format = getFormat(pathToBib);
   const [csl, idToKey] = getCSLJson(pathToBib, format);
@@ -81,18 +83,20 @@ export default function bibliography(
   const cslStyle = STYLES[style];
   const cslLocale = LOCALES[locale];
 
-  return citations(csl, { style: cslStyle, locale: cslLocale, idToKey })[1];
+  return citations(csl, { style: cslStyle, locale: cslLocale, idToKey, lang });
 }
 
 //console.log(bibliography("essay.bib", { locale: "de" }));
 // console.log(bibliography("essay.json", { locale: "de" }));
 
-const md = MdIt().use(citationsPlugin);
+const md = MdIt().use(bibliography("essay.json", { locale: "de", lang: "de" }));
 
 const example = `
 # Hello
 
-Example cit: [@klein4[See *further*][44--48, 113, 204]]
+Example cit: [@klein[Siehe *weiter*][44--48, 113 und 204]]
+
+[@logic]
 `;
 
 const out = md.render(example);

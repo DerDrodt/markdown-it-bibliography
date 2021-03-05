@@ -8,6 +8,7 @@ export interface CSLBibliography {
 export interface Options {
   style?: StyleOption;
   locale?: LocaleOption;
+  lang?: string;
 }
 
 export enum Format {
