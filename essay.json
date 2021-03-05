@@ -1,0 +1,400 @@
+[
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "collection-number": "770",
+    "collection-title": "stw",
+    "editor": [
+      {
+        "family": "Schulte",
+        "given": "Joachim"
+      }
+    ],
+    "id": "klein",
+    "issued": {
+      "date-parts": [[1989]]
+    },
+    "publisher": "Suhrkamp",
+    "publisher-place": "Frankfurt am Main",
+    "title": "Vortrag über Ethik und andere kleine Schriften",
+    "type": "book"
+  },
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "collection-number": "770",
+    "collection-title": "stw",
+    "container-title": "Vortrag über Ethik und andere kleine Schriften",
+    "editor": [
+      {
+        "family": "Schulte",
+        "given": "Joachim"
+      }
+    ],
+    "id": "ethik",
+    "issued": {
+      "date-parts": [[1989]]
+    },
+    "page": "9-19",
+    "publisher": "Suhrkamp",
+    "publisher-place": "Frankfurt am Main",
+    "title": "Vortrag über Ethik",
+    "type": "chapter"
+  },
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "collection-number": "770",
+    "collection-title": "stw",
+    "container-title": "Vortrag über Ethik und andere kleine Schriften",
+    "editor": [
+      {
+        "family": "Schulte",
+        "given": "Joachim"
+      }
+    ],
+    "id": "logic",
+    "issued": {
+      "date-parts": [[1989]]
+    },
+    "page": "20-28",
+    "publisher": "Suhrkamp",
+    "publisher-place": "Frankfurt am Main",
+    "title": "Bemerkungen über logische Formen",
+    "type": "chapter"
+  },
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "collection-number": "770",
+    "collection-title": "stw",
+    "container-title": "Vortrag über Ethik und andere kleine Schriften",
+    "editor": [
+      {
+        "family": "Schulte",
+        "given": "Joachim"
+      }
+    ],
+    "id": "onFrazer",
+    "issued": {
+      "date-parts": [[1989]]
+    },
+    "page": "29-46",
+    "publisher": "Suhrkamp",
+    "publisher-place": "Frankfurt am Main",
+    "title": "Bemerkungen über Frazers Golden Bough",
+    "type": "chapter"
+  },
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "collection-number": "770",
+    "collection-title": "stw",
+    "container-title": "Vortrag über Ethik und andere kleine Schriften",
+    "editor": [
+      {
+        "family": "Schulte",
+        "given": "Joachim"
+      }
+    ],
+    "id": "private",
+    "issued": {
+      "date-parts": [[1989]]
+    },
+    "page": "101-139",
+    "publisher": "Suhrkamp",
+    "publisher-place": "Frankfurt am Main",
+    "title": "Aufzeichnungen für Vorlesungen über 'privates Erlebnis' und 'Sinnesdaten'",
+    "type": "chapter"
+  },
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "collection-number": "770",
+    "collection-title": "stw",
+    "container-title": "Vortrag über Ethik und andere kleine Schriften",
+    "editor": [
+      {
+        "family": "Schulte",
+        "given": "Joachim"
+      }
+    ],
+    "id": "cause",
+    "issued": {
+      "date-parts": [[1989]]
+    },
+    "page": "101-139",
+    "publisher": "Suhrkamp",
+    "publisher-place": "Frankfurt am Main",
+    "title": "Ursache und Wirkung",
+    "type": "chapter"
+  },
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "id": "tractatus",
+    "issued": {
+      "date-parts": [[1963]]
+    },
+    "publisher": "Suhrkamp",
+    "publisher-place": "Frankfurt am Main",
+    "title": "Tractatus logico-philosophicus: Logisch-philosophische Abhandlung",
+    "title-short": "Tractatus logico-philosophicus",
+    "type": "book"
+  },
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "edition": "4",
+    "id": "PU",
+    "issued": {
+      "date-parts": [[2009]]
+    },
+    "publisher": "Wiley-Blackwell",
+    "publisher-place": "Chichester, West Sussex, U.K. Malden MA",
+    "title": "Philosophical Investigations = Philosophische Untersuchungen",
+    "translator": [
+      {
+        "family": "Anscombe",
+        "given": "G. E. M."
+      },
+      {
+        "family": "Hacker",
+        "given": "P. M. S."
+      },
+      {
+        "family": "Schulte",
+        "given": "Joachim"
+      }
+    ],
+    "type": "book"
+  },
+  {
+    "author": [
+      {
+        "family": "Wittgenstein",
+        "given": "Ludwig"
+      }
+    ],
+    "editor": [
+      {
+        "family": "Reeves",
+        "given": "Rush"
+      }
+    ],
+    "id": "remarks",
+    "issued": {
+      "date-parts": [[1980]]
+    },
+    "publisher": "University of Chicago Press; Basil Blackwell",
+    "publisher-place": "Chicago; Oxford",
+    "title": "Philosophical Remarks",
+    "translator": [
+      {
+        "family": "Hargreaves",
+        "given": "Raymond"
+      },
+      {
+        "family": "White",
+        "given": "Roger"
+      }
+    ],
+    "type": "book"
+  },
+  {
+    "author": [
+      {
+        "family": "Malcolm",
+        "given": "Norman"
+      }
+    ],
+    "edition": "2",
+    "id": "memoir",
+    "issued": {
+      "date-parts": [[2001]]
+    },
+    "publisher": "Oxford University Press",
+    "publisher-place": "Oxford",
+    "title": "Ludwig Wittgenstein: A Memoir",
+    "title-short": "Ludwig Wittgenstein",
+    "type": "book"
+  },
+  {
+    "author": [
+      {
+        "family": "Carnap",
+        "given": "Rudolf"
+      }
+    ],
+    "collection-title": "The Library of Living Philosophers",
+    "editor": [
+      {
+        "family": "Schlipp",
+        "given": "Paul Arthur"
+      }
+    ],
+    "id": "carnap",
+    "issued": {
+      "date-parts": [[1963]]
+    },
+    "publisher": "Open Court",
+    "publisher-place": "La Salle, Illinois",
+    "title": "The Philosophy of Rudolf Carnap",
+    "type": "book",
+    "volume": "11"
+  },
+  {
+    "DOI": "10.1098/rstl.1804.0001",
+    "URL": "https://doi.org/10.1098/rstl.1804.0001",
+    "author": [
+      {
+        "family": "Young",
+        "given": "Thomas"
+      }
+    ],
+    "container-title": "Philosophical Transactions of the Royal Society of London",
+    "id": "YoungITB",
+    "issued": {
+      "date-parts": [[1804]]
+    },
+    "page": "1-16",
+    "title": "I. The Bakerian Lecture. Experiments and calculations relative to physical optics",
+    "type": "article-journal",
+    "volume": "94"
+  },
+  {
+    "DOI": "10.1103/PhysRev.21.483",
+    "URL": "https://link.aps.org/doi/10.1103/PhysRev.21.483",
+    "author": [
+      {
+        "family": "Compton",
+        "given": "Arthur H"
+      }
+    ],
+    "container-title": "Physical Review",
+    "id": "compton1923quantum",
+    "issue": "5",
+    "issued": {
+      "date-parts": [[1923]]
+    },
+    "page": "483-502",
+    "publisher": "APS",
+    "title": "A quantum theory of the scattering of X-rays by light elements",
+    "type": "article-journal",
+    "volume": "21"
+  },
+  {
+    "URL": "http://arxiv.org/abs/1001.3080",
+    "author": [
+      {
+        "family": "Blood",
+        "given": "Casey"
+      }
+    ],
+    "id": "blood2010primer",
+    "issued": {
+      "date-parts": [[2010]]
+    },
+    "title": "A primer on quantum mechanics and its interpretations",
+    "type": ""
+  },
+  {
+    "author": [
+      {
+        "family": "Einstein",
+        "given": "Albert"
+      }
+    ],
+    "container-title": "Annalen der Physik",
+    "id": "einstein1911einfluss",
+    "issue": "10",
+    "issued": {
+      "date-parts": [[1911]]
+    },
+    "page": "898-908",
+    "publisher": "WILEY-VCH Verlag Leipzig",
+    "title": "Über den Einfluß der Schwerkraft auf die Ausbreitung des Lichtes",
+    "type": "article-journal",
+    "volume": "340"
+  },
+  {
+    "URL": "http://www.newtonproject.ox.ac.uk/view/texts/normalized/THEM00258",
+    "accessed": {
+      "date-parts": [[2020, 12, 19]]
+    },
+    "author": [
+      {
+        "family": "Newton",
+        "given": "Isaac"
+      }
+    ],
+    "id": "newtonBently",
+    "issued": {
+      "date-parts": [[1692, 2, 25]]
+    },
+    "note": "Ich war nicht in der Lage, die Authentizität dieser Quelle zu verifizieren. Es ist auch möglich, dass dieser Brief im Jahr 1693 verfasst wurde.",
+    "title": "Original letter from Isaac Newton to Richard Bentley",
+    "type": "personal_communication"
+  },
+  {
+    "DOI": "10.1080/0950069970191003",
+    "URL": " \n    https://doi.org/10.1080/0950069970191003\n    ",
+    "author": [
+      {
+        "family": "Bar",
+        "given": "V."
+      },
+      {
+        "family": "Zinn",
+        "given": "B."
+      },
+      {
+        "family": "Rubin",
+        "given": "E."
+      }
+    ],
+    "container-title": "International Journal of Science Education",
+    "id": "doi:10.1080/0950069970191003",
+    "issue": "10",
+    "issued": {
+      "date-parts": [[1997]]
+    },
+    "page": "1137-1157",
+    "publisher": "Routledge",
+    "title": "Children’s ideas about action at a distance",
+    "type": "article-journal",
+    "volume": "19"
+  }
+]
