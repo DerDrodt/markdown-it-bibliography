@@ -20,17 +20,17 @@ declare module "citeproc" {
     label?: string;
     prefix?: string;
     suffix?: string;
-    "suppress-auhtor": boolean;
-    "author-only": boolean;
+    "suppress-author"?: boolean;
+    "author-only"?: boolean;
   }
 
   interface Citation {
     citationItems: CiteItem[];
     properties?: {
       noteIndex: number;
-      citationID?: string;
-      sortedItems?: any;
     };
+    citationID?: string;
+    sortedItems?: any;
   }
 
   type CitationIdNoteNumPair = [string | number, number][];

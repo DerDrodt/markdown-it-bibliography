@@ -83,20 +83,30 @@ export default function bibliography(
   const cslStyle = STYLES[style];
   const cslLocale = LOCALES[locale];
 
-  return citations(csl, { style: cslStyle, locale: cslLocale, idToKey, lang });
+  return citations(csl, cslLocale, {
+    style: cslStyle,
+    idToKey,
+    lang,
+  });
 }
 
 //console.log(bibliography("essay.bib", { locale: "de" }));
 // console.log(bibliography("essay.json", { locale: "de" }));
 
-const md = MdIt().use(bibliography("essay.json", { locale: "de", lang: "de" }));
+const md = MdIt().use(
+  bibliography("essay.json", { locale: "de", lang: "de", style: "chicago" }),
+);
 
 const example = `
 # Hello
 
-Example cit: [@klein[Siehe *weiter*][44--48, 113 und 204]]
+Example cit: [@klein[Siehe *weiter*][§ 44--48, 113 & 204 für weitere Details]]
 
-[@logic]
+[@logic[44]]
+
+[@onFrazer]
+
+[@onFrazer; @logic[44]; @klein[Siehe *weiter*][44--48, 113, 204]; @memoir]
 `;
 
 const out = md.render(example);

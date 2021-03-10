@@ -4,13 +4,12 @@ export interface CiteItem {
   label?: string;
   prefix?: string;
   suffix?: string;
-  "suppress-auhtor": boolean;
-  "author-only": boolean;
+  "suppress-author"?: boolean;
+  "author-only"?: boolean;
 }
 
 export interface Citation {
   citationItems: CiteItem[];
-  key: string;
   properties?: {
     noteIndex: number;
   };

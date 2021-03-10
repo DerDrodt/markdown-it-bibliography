@@ -1,25 +1,25 @@
 import chicago from "style-chicago";
 import CSL from "citeproc";
-import enUS from "locale-en-us";
 import type MdIt from "markdown-it";
 import type Token from "markdown-it/lib/token";
 import type Renderer from "markdown-it/lib/renderer";
 import type ParserInline from "markdown-it/lib/parser_inline";
 import type ParserCore from "markdown-it/lib/parser_core";
-import type StateInline from "markdown-it/lib/rules_inline/state_inline";
 import type { CSLBibliography } from "./types/bibliography";
 import type { Citation } from "./types/citation";
+import type { Locale } from "./types/locale";
 import { LOCALES } from "./const.js";
+import { parseCitationItems } from "./citation-parser.js";
 
 interface Options {
   style?: any;
-  locale?: any;
   idToKey?: Map<string, string>;
   lang?: string;
 }
 
 export default function citations(
   items: CSLBibliography,
+  loc: Locale,
   { style = chicago, lang }: Options = {},
 ) {
   const sys = {
@@ -67,7 +67,9 @@ export default function citations(
     if (!env.citations.seen) {
       env.citations.seen = [];
       citeproc.updateItems(
-        (env.citations.list as Citation[]).map((c) => c.key),
+        (env.citations.list as Citation[])
+          .map((c) => c.citationItems.map((i) => i.id))
+          .flat(),
       );
     }
     const prev: Citation[] = env.citations.seen;
@@ -87,7 +89,7 @@ export default function citations(
     return `${
       options.xhtmlOut ? '<hr class="bib-sep" />\n' : '<hr class="bib-sep">\n'
     }<section class="bibliography">
-    <h3>Literatur</h3>
+    <h3>Bibliography</h3>
 `;
   };
 
@@ -122,10 +124,16 @@ export default function citations(
       const { posMax: max, pos: start } = state;
 
       if (start + 2 >= max) return false;
-      if (state.src.charCodeAt(start) !== 0x5b /* [ */) return false;
-      if (state.src.charCodeAt(start + 1) !== 0x40 /* @ */) return false;
+      const isNormalAuto =
+        state.src.charCodeAt(start) === 0x5b /* [ */ &&
+        state.src.charCodeAt(start + 1) === 0x40; /* @ */
+      const isSuppressedAuto =
+        state.src.charCodeAt(start) === 0x5b /* [ */ &&
+        state.src.charCodeAt(start + 1) === 0x2d /* - */ &&
+        state.src.charCodeAt(start + 2) === 0x40; /* @ */
+      if (!isNormalAuto && !isSuppressedAuto) return false;
 
-      labelStart = start + 2;
+      labelStart = start + 1;
       labelEnd = parseLinkLabel(state, start);
 
       // parser failed to find ']', so it's not a valid citation
@@ -143,30 +151,18 @@ export default function citations(
           state.env.citations.list = [];
         }
 
-        const potentialKey = getCitationKey(state, start + 1, max);
-        if (potentialKey === undefined) return false;
-        const [citeKey, keyEnd] = potentialKey;
+        const possibleCiteItems = parseCitationItems(
+          state,
+          labelStart,
+          max,
+          labelEnd,
+          loc,
+          parseLinkLabel,
+          (text) => md.renderInline(text, { ...state.env, disableBib: true }),
+        );
+        if (!possibleCiteItems) return false;
 
-        let prefixString: string | undefined = undefined;
-        let suffixString: string | undefined = undefined;
-        let afterKey = keyEnd;
-        if (state.src.charCodeAt(keyEnd) === 0x5b /* [ */) {
-          const labelEnd = parseLinkLabel(state, keyEnd + 1);
-          if (labelEnd < 0) return false;
-          suffixString = state.src.substring(keyEnd + 1, labelEnd);
-          afterKey = labelEnd + 1;
-          if (state.src.charCodeAt(labelEnd + 1) === 0x5b /* [ */) {
-            const innerLabelEnd = parseLinkLabel(state, labelEnd + 2);
-            if (innerLabelEnd < 0) return false;
-            prefixString = suffixString;
-            suffixString = state.src.substring(labelEnd + 2, innerLabelEnd);
-            afterKey = innerLabelEnd + 1;
-
-            prefixString = state.md.renderInline(prefixString);
-          }
-        }
-
-        // TODO: Lists
+        const [citationItems, afterItems] = possibleCiteItems;
 
         // TODO: Parse postfix?
         const citeId = state.env.citations.list.length;
@@ -175,18 +171,10 @@ export default function citations(
 
         state.env.citations.list[citeId] = {
           // TODO
-          citationItems: [
-            {
-              id: citeKey,
-              locator: suffixString,
-              prefix: prefixString,
-              label: "page",
-            },
-          ],
+          citationItems,
           properties: {
             noteIndex: 0,
           },
-          key: citeKey,
         };
       }
 
@@ -196,7 +184,11 @@ export default function citations(
     };
 
     const citationBib: ParserCore.RuleCore = (state) => {
-      if (!state.env.citations || state.env.citations.length === 0) {
+      if (
+        !state.env.citations ||
+        state.env.citations.length === 0 ||
+        state.env.disableBib
+      ) {
         return false;
       }
 
@@ -216,21 +208,3 @@ export default function citations(
 
   return citationsPlugin;
 }
-
-const getCitationKey = (
-  state: StateInline,
-  start: number,
-  max: number,
-): [string, number] | undefined => {
-  if (start + 1 >= max) return undefined;
-  if (state.src.charCodeAt(start) !== 0x40 /* @ */) return undefined;
-  if (!/[\w\d_]/.test(state.src.charAt(start + 1))) return undefined;
-  let pos = start + 1;
-  let key = "";
-  while (pos < max && /[\w\d_:.#$%&-+?<>~/]/.test(state.src.charAt(pos))) {
-    key += state.src.charAt(pos);
-    pos++;
-  }
-
-  return [key, pos];
-};
