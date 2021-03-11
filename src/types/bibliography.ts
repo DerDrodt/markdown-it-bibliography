@@ -1,14 +1,17 @@
 import type { CSLEntry } from "biblatex-csl-converter-ts";
-import type { LocaleOption, StyleOption } from "../const.js";
+import type { Style } from "./style";
+import type { Locale } from "./locale";
+import type { StyleStringOption } from "../const.js";
 
 export interface CSLBibliography {
   [key: string]: CSLEntry;
 }
 
 export interface Options {
-  style?: StyleOption;
-  locale?: LocaleOption;
+  style?: StyleStringOption | Style;
+  locales?: { [key: string]: Locale };
   lang?: string;
+  defaultLocale?: string;
 }
 
 export enum Format {

@@ -108,6 +108,5 @@ export const getLocator = (s: string, loc: Locale) => {
   if (is) {
     [locator, suffix] = is;
   }
-  console.log({ label, locator, suffix });
   return { label, locator, suffix };
 };

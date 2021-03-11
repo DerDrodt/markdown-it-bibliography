@@ -1,4 +1,4 @@
-import type { XMLJson } from "xmljson";
+import type { XMLJson } from "./xmljson";
 
 export interface Locale extends XMLJson {
   name: "locale";

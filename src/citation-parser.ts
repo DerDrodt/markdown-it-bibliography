@@ -1,5 +1,5 @@
-import type { CiteItem } from "citation";
-import type { Locale } from "./types/locale";
+import type { CiteItem } from "./types/citation";
+import type { Sys } from "./types/sys";
 import type StateInline from "markdown-it/lib/rules_inline/state_inline";
 import { getLocator } from "./locator.js";
 
@@ -8,9 +8,11 @@ export const parseCitationItems = (
   start: number,
   max: number,
   labelEnd: number,
-  loc: Locale,
+  sys: Sys,
+  defaultLocale: string,
   parseLinkLabel: (state: StateInline, start: number) => number,
   renderInline: (text: string) => string,
+  idToKey?: Map<string, string>,
 ): [CiteItem[], number] | undefined => {
   const items: CiteItem[] = [];
   let pos = start;
@@ -19,9 +21,11 @@ export const parseCitationItems = (
       state,
       pos,
       max,
-      loc,
+      sys,
+      defaultLocale,
       parseLinkLabel,
       renderInline,
+      idToKey,
     );
     if (!possibleItem) break;
     const [item, afterItem] = possibleItem;
@@ -43,9 +47,11 @@ export const parseCitationItem = (
   state: StateInline,
   start: number,
   max: number,
-  loc: Locale,
+  sys: Sys,
+  defaultLocale: string,
   parseLinkLabel: (state: StateInline, start: number) => number,
   renderInline: (text: string) => string,
+  idToKey?: Map<string, string>,
 ): [CiteItem, number] | undefined => {
   const suppressAuthor = state.src.charAt(start) === "-";
   if (suppressAuthor) start++;
@@ -57,6 +63,10 @@ export const parseCitationItem = (
     posAfterKey,
     parseLinkLabel,
     renderInline,
+  );
+  const normalizedId = idToKey ? idToKey.get(id)! : id;
+  const loc = sys.retrieveLocale(
+    sys.retrieveItem(normalizedId).language ?? defaultLocale,
   );
   const { locator, label, suffix } = postNote
     ? getLocator(postNote, loc)

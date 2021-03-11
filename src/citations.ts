@@ -1,4 +1,3 @@
-import chicago from "style-chicago";
 import CSL from "citeproc";
 import type MdIt from "markdown-it";
 import type Token from "markdown-it/lib/token";
@@ -8,25 +7,27 @@ import type ParserCore from "markdown-it/lib/parser_core";
 import type { CSLBibliography } from "./types/bibliography";
 import type { Citation } from "./types/citation";
 import type { Locale } from "./types/locale";
-import { LOCALES } from "./const.js";
+import type { Style } from "./types/style";
 import { parseCitationItems } from "./citation-parser.js";
 
 interface Options {
-  style?: any;
+  style: Style;
+  locales: { [key: string]: Locale };
   idToKey?: Map<string, string>;
   lang?: string;
+  defaultLocale: string;
 }
 
 export default function citations(
   items: CSLBibliography,
-  loc: Locale,
-  { style = chicago, lang }: Options = {},
+  { style, lang, idToKey, locales, defaultLocale }: Options,
 ) {
   const sys = {
     retrieveLocale: (lang: string) => {
-      return LOCALES[lang.toLowerCase() as keyof typeof LOCALES];
+      return locales[lang];
     },
     retrieveItem: (id: string | number) => {
+      //if (idToKey) id = idToKey.get(id as string)!;
       return items[id];
     },
   };
@@ -156,9 +157,11 @@ export default function citations(
           labelStart,
           max,
           labelEnd,
-          loc,
+          sys,
+          defaultLocale,
           parseLinkLabel,
           (text) => md.renderInline(text, { ...state.env, disableBib: true }),
+          idToKey,
         );
         if (!possibleCiteItems) return false;
 
@@ -170,8 +173,9 @@ export default function citations(
         token.meta = { id: citeId };
 
         state.env.citations.list[citeId] = {
-          // TODO
-          citationItems,
+          citationItems: idToKey
+            ? citationItems.map((i) => ({ ...i, id: idToKey.get(i.id) }))
+            : citationItems,
           properties: {
             noteIndex: 0,
           },
