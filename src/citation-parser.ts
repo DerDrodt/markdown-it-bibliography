@@ -122,6 +122,7 @@ export const parsePreSuffix = (
   if (state.src.charCodeAt(start) !== 0x5b)
     return [undefined, undefined, start];
   let [suffix, end] = parseCitationLabel(state, start + 1, parseLinkLabel);
+  if (suffix === undefined) return [undefined, undefined, start];
   if (state.src.charCodeAt(end + 1) !== 0x5b)
     return [undefined, suffix, end + 1];
   const prefix = suffix ? renderInline(suffix) : undefined;

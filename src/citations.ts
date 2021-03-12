@@ -86,6 +86,37 @@ export default function citations(
     return env.citations.rendered[id] as string;
   };
 
+  const render_citation_text: Renderer.RenderRule = (
+    tokens: Token[],
+    idx: number,
+    _options: MdIt.Options,
+    env: any,
+    _self: Renderer,
+  ) => {
+    const token = tokens[idx];
+    const id = token.meta.id;
+    const cit: Citation = env.citations.list[id];
+    if (!env.citations.seen) {
+      env.citations.seen = [];
+      citeproc.updateItems(
+        (env.citations.list as Citation[])
+          .map((c) => c.citationItems.map((i) => i.id))
+          .flat(),
+      );
+    }
+    const prev: Citation[] = env.citations.seen;
+    const result = citeproc.processCitationCluster(
+      cit,
+      prev.map((c) => [c.citationID!, c.properties!.noteIndex]),
+      [],
+    );
+
+    env.citations.seen.push(cit);
+    result[1].forEach(([idx]) => rerenderCitation(prev[idx], env));
+
+    return env.citations.rendered[id] as string;
+  };
+
   const renderBibOpen: Renderer.RenderRule = (_a, _b, options) => {
     return `${
       options.xhtmlOut ? '<hr class="bib-sep" />\n' : '<hr class="bib-sep">\n'
@@ -107,11 +138,72 @@ export default function citations(
     const { parseLinkLabel } = md.helpers;
 
     md.renderer.rules.citation_auto = render_citation_auto;
+    md.renderer.rules.citation_text = render_citation_text;
     md.renderer.rules.citation_bib = renderBib;
     md.renderer.rules.citation_bib_open = renderBibOpen;
     md.renderer.rules.citation_bib_close = renderBibClose;
 
     // @key | @key[post] | @key[pre][post]
+    const textCitation: ParserInline.RuleInline = (state, silent) => {
+      if (silent) return false;
+      const { posMax: max, pos: start } = state;
+      if (start + 2 >= max) return false;
+
+      const isNormal = state.src.charCodeAt(start) === 0x40; /* @ */
+      const isSuppressedAuthor =
+        state.src.charCodeAt(start) === 0x2d /* - */ &&
+        state.src.charCodeAt(start + 1) === 0x40; /* @ */
+
+      if (!isNormal && !isSuppressedAuthor) return false;
+      if (start > 0 && state.src.charCodeAt(start - 1) === 0x5b /* [ */)
+        return false;
+
+      let end = start;
+
+      if (!state.env.citations) {
+        state.env.citations = {};
+      }
+      if (!state.env.citations.list) {
+        state.env.citations.list = [];
+      }
+
+      const possibleCiteItems = parseCitationItems(
+        state,
+        start,
+        max,
+        max,
+        sys,
+        defaultLocale,
+        parseLinkLabel,
+        (text) => md.renderInline(text, { ...state.env, disableBib: true }),
+        idToKey,
+      );
+      if (!possibleCiteItems) return false;
+
+      const [citationItems, afterItems] = possibleCiteItems;
+
+      const citeId = state.env.citations.list.length;
+      const token = state.push("citation_text", "", 0);
+      token.meta = { id: citeId };
+
+      state.env.citations.list[citeId] = {
+        citationItems: idToKey
+          ? citationItems.map((i) => ({
+              ...i,
+              id: idToKey.get(i.id),
+            }))
+          : citationItems,
+        properties: {
+          noteIndex: 0,
+          mode: isSuppressedAuthor ? "suppress-author" : "composite",
+        },
+      };
+      end = afterItems;
+
+      state.pos = end;
+      state.posMax = max;
+      return true;
+    };
 
     // (@key | @key[post] | @key[pre][post])
 
@@ -151,6 +243,7 @@ export default function citations(
         if (!state.env.citations.list) {
           state.env.citations.list = [];
         }
+        state.md.disable("citation_text");
 
         const possibleCiteItems = parseCitationItems(
           state,
@@ -167,7 +260,6 @@ export default function citations(
 
         const [citationItems, afterItems] = possibleCiteItems;
 
-        // TODO: Parse postfix?
         const citeId = state.env.citations.list.length;
         token = state.push("citation_auto", "", 0);
         token.meta = { id: citeId };
@@ -184,6 +276,7 @@ export default function citations(
 
       state.pos = end;
       state.posMax = max;
+      state.md.enable("citation_text");
       return true;
     };
 
@@ -207,6 +300,7 @@ export default function citations(
     };
 
     md.inline.ruler.after("image", "citation_auto", autoCitation);
+    md.inline.ruler.after("image", "citation_text", textCitation);
     md.core.ruler.after("inline", "citation_bib", citationBib);
   }
 

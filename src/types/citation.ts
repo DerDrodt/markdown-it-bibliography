@@ -12,6 +12,7 @@ export interface Citation {
   citationItems: CiteItem[];
   properties?: {
     noteIndex: number;
+    mode?: "author-only" | "suppress-author" | "composite";
   };
   citationID?: string;
   sortedItems?: any;
