@@ -10,7 +10,6 @@ export const parseCitationItems = (
   labelEnd: number,
   sys: Sys,
   defaultLocale: string,
-  parseLinkLabel: (state: StateInline, start: number) => number,
   renderInline: (text: string) => string,
   idToKey?: Map<string, string>,
 ): [CiteItem[], number] | undefined => {
@@ -23,7 +22,6 @@ export const parseCitationItems = (
       max,
       sys,
       defaultLocale,
-      parseLinkLabel,
       renderInline,
       idToKey,
     );
@@ -49,7 +47,6 @@ export const parseCitationItem = (
   max: number,
   sys: Sys,
   defaultLocale: string,
-  parseLinkLabel: (state: StateInline, start: number) => number,
   renderInline: (text: string) => string,
   idToKey?: Map<string, string>,
 ): [CiteItem, number] | undefined => {
@@ -61,7 +58,6 @@ export const parseCitationItem = (
   const [prefix, postNote, afterLabel] = parsePreSuffix(
     state,
     posAfterKey,
-    parseLinkLabel,
     renderInline,
   );
   const normalizedId = idToKey ? idToKey.get(id)! : id;
@@ -105,7 +101,6 @@ export const parseCitationKey = (
 export const parseCitationLabel = (
   state: StateInline,
   start: number,
-  parseLinkLabel: (state: StateInline, start: number) => number,
 ): [string | undefined, number] => {
   const labelEnd = parseLinkLabel(state, start);
   if (labelEnd < 0) return [undefined, start];
@@ -116,17 +111,64 @@ export const parseCitationLabel = (
 export const parsePreSuffix = (
   state: StateInline,
   start: number,
-  parseLinkLabel: (state: StateInline, start: number) => number,
   renderInline: (text: string) => string,
 ): [string | undefined, string | undefined, number] => {
-  if (state.src.charCodeAt(start) !== 0x5b)
+  if (state.src.charCodeAt(start) !== 0x7b)
     return [undefined, undefined, start];
-  let [suffix, end] = parseCitationLabel(state, start + 1, parseLinkLabel);
+  let [suffix, end] = parseCitationLabel(state, start + 1);
   if (suffix === undefined) return [undefined, undefined, start];
-  if (state.src.charCodeAt(end + 1) !== 0x5b)
+  if (state.src.charCodeAt(end + 1) !== 0x7b)
     return [undefined, suffix, end + 1];
   const prefix = suffix ? renderInline(suffix) : undefined;
-  [suffix, end] = parseCitationLabel(state, end + 2, parseLinkLabel);
+  [suffix, end] = parseCitationLabel(state, end + 2);
 
   return [prefix, suffix, end + 1];
+};
+
+const parseLinkLabel = (
+  state: StateInline,
+  start: number,
+  disableNested: boolean = false,
+) => {
+  let found = false;
+  let marker: number | undefined;
+  let prevPos: number | undefined;
+  let labelEnd = -1;
+  const max = state.posMax;
+  const oldPos = state.pos;
+
+  state.pos = start + 1;
+  let level = 1;
+
+  while (state.pos < max) {
+    marker = state.src.charCodeAt(state.pos);
+    if (marker === 0x7d /* } */) {
+      level--;
+      if (level === 0) {
+        found = true;
+        break;
+      }
+    }
+
+    prevPos = state.pos;
+    state.md.inline.skipToken(state);
+    if (marker === 0x7b /* { */) {
+      if (prevPos === state.pos - 1) {
+        // increase level if we find text `{`, which is not a part of any token
+        level++;
+      } else if (disableNested) {
+        state.pos = oldPos;
+        return -1;
+      }
+    }
+  }
+
+  if (found) {
+    labelEnd = state.pos;
+  }
+
+  // restore old state
+  state.pos = oldPos;
+
+  return labelEnd;
 };

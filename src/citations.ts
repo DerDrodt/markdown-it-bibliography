@@ -174,7 +174,6 @@ export default function citations(
         max,
         sys,
         defaultLocale,
-        parseLinkLabel,
         (text) => md.renderInline(text, { ...state.env, disableBib: true }),
         idToKey,
       );
@@ -252,13 +251,14 @@ export default function citations(
           labelEnd,
           sys,
           defaultLocale,
-          parseLinkLabel,
           (text) => md.renderInline(text, { ...state.env, disableBib: true }),
           idToKey,
         );
         if (!possibleCiteItems) return false;
 
         const [citationItems, afterItems] = possibleCiteItems;
+
+        if (state.src.charCodeAt(afterItems) !== 0x5d /* ] */) return false;
 
         const citeId = state.env.citations.list.length;
         token = state.push("citation_auto", "", 0);
