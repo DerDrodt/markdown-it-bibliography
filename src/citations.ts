@@ -8,7 +8,7 @@ import type { CSLBibliography } from "./types/bibliography";
 import type { Citation } from "./types/citation";
 import type { Locale } from "./types/locale";
 import type { Style } from "./types/style";
-import { parseCitationItems } from "./citation-parser.js";
+import { parseCitationItem, parseCitationItems } from "./citation-parser.js";
 
 interface Options {
   style: Style;
@@ -167,10 +167,9 @@ export default function citations(
         state.env.citations.list = [];
       }
 
-      const possibleCiteItems = parseCitationItems(
+      const possibleCiteItems = parseCitationItem(
         state,
         start,
-        max,
         max,
         sys,
         defaultLocale,
@@ -179,7 +178,7 @@ export default function citations(
       );
       if (!possibleCiteItems) return false;
 
-      const [citationItems, afterItems] = possibleCiteItems;
+      const [citationItem, afterItem] = possibleCiteItems;
 
       const citeId = state.env.citations.list.length;
       const token = state.push("citation_text", "", 0);
@@ -187,17 +186,14 @@ export default function citations(
 
       state.env.citations.list[citeId] = {
         citationItems: idToKey
-          ? citationItems.map((i) => ({
-              ...i,
-              id: idToKey.get(i.id),
-            }))
-          : citationItems,
+          ? [{ ...citationItem, id: idToKey.get(citationItem.id) }]
+          : [citationItem],
         properties: {
           noteIndex: 0,
           mode: isSuppressedAuthor ? "suppress-author" : "composite",
         },
       };
-      end = afterItems;
+      end = afterItem;
 
       state.pos = end;
       state.posMax = max;

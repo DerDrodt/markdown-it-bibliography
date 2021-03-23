@@ -24,7 +24,7 @@ const src = `
 `;
 const mdIt = MdIt().use(biblio("test/fixtures/Autocite.bib"));
 const res = mdIt.render(src);
-console.log(res);
+//console.log(res);
 
 const vancouver = `<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" page-range-format="minimal">
@@ -379,4 +379,22 @@ const vancouver = `<?xml version="1.0" encoding="utf-8"?>
 </style>
 `;
 
-console.log(parseXml(vancouver));
+//console.log(parseXml(vancouver));
+
+const readmeExample = `
+Here is a citation [@chomsky], one with page info (a.k.a locator) [@chomsky{p. 4}], one with a prefix [@chomsky{See}{p. 4}].
+
+Multiple citations: [@chomsky{p. 4}; @hermanChomsky; @lafeber{Cf.}{xi}]
+`;
+
+const readmeExampleText = `
+Here is a citation @chomsky, one with page info (a.k.a locator) @chomsky{p. 4}, one with a prefix @chomsky{See}{p. 4}.
+
+Multiple citations: @chomsky{p. 5}; @hermanChomsky; @lafeber{Cf.}{xii}
+`;
+
+const mdIt2 = MdIt().use(biblio("readme.bib"));
+const res2 = mdIt2.render(readmeExample);
+console.log(res2);
+const res3 = mdIt2.render(readmeExampleText);
+console.log(res3);
