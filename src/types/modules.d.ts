@@ -47,6 +47,23 @@ declare module "citeproc" {
     entry_ids: (string | number)[];
   }
 
+  export interface XMLJson {
+    name: string;
+    attrs: {
+      xmlns: string;
+      version: string;
+    };
+    children: XMLJsonNode[];
+  }
+
+  export interface XMLJsonNode {
+    name: string;
+    attrs: {
+      [key: string]: any;
+    };
+    children: XMLJsonNode[] | string;
+  }
+
   class Engine {
     constructor(sys: Sys, style: any, lang?: any, forceLang?: any);
     updateItems(idList: (string | number)[]): void;
@@ -67,6 +84,6 @@ declare module "citeproc" {
       filter?: (string | number)[],
     ): [FormattingParams, string[]];
   }
-  const CSL: { Engine: typeof Engine };
+  const CSL: { Engine: typeof Engine; parseXml: (src: string) => XMLJson };
   export default CSL;
 }

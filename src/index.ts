@@ -1,11 +1,13 @@
 import path from "path";
 import fs from "fs";
 import chicago from "style-chicago";
+import citeproc from "citeproc";
 import { BibLatexParser, CSLExporter } from "biblatex-csl-converter-ts";
 import { STYLES, LOCALES } from "./const.js";
 import { CSLBibliography, Format, Options } from "./types/bibliography.js";
 import citations from "./citations.js";
 import type { Style } from "./types/style";
+import type { XMLJson } from "./types/xmljson";
 
 // import MdIt from "markdown-it";
 
@@ -101,34 +103,6 @@ export default function bibliography(
   });
 }
 
-//console.log(bibliography("essay.bib", { locale: "de" }));
-// console.log(bibliography("essay.json", { locale: "de" }));
+const parseXml = citeproc.parseXml as (src: string) => XMLJson;
 
-/* const md = MdIt().use(
-  bibliography("essay.json", { lang: "de", style: "chicago" }),
-);
-
-const example = `
-# Hello
-
-Example cit: [@klein[Siehe *weiter*][§ 44--48, 113 & 204 für weitere Details]]
-
-[@logic[44]]
-
-[@onFrazer]
-
-[@onFrazer; @logic[44]; @klein[Siehe *weiter*][44--48, 113, 204]; @memoir]
-
-[@logic[25]]
-[@logic[vii]]
-[@logic[XIV]]
-[@logic[34--38]]
-[@logic[185/86]]
-[@logic[XI & XV]]
-[@logic[3, 5, 7]]
-[@logic[vii-x; 5, 7]]
-`;
-
-const out = md.render(example);
-
-console.log(out); */
+export { parseXml };
