@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-bibliography",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Markdown-it plugin for adding bibliographies to markdown.",
   "keywords": [
     "markdown-it-plugin",
