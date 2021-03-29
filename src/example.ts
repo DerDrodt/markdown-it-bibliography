@@ -1,5 +1,6 @@
 import MdIt from "markdown-it";
-import biblio, { parseXml } from "./index.js";
+import biblio, { parseXml, Style } from "./index.js";
+import { readFileSync } from "fs";
 
 const src = `
 - [@logic{25}]
@@ -22,8 +23,8 @@ const src = `
 - [@logic{25]
 - [@logic{See{25]]
 `;
-const mdIt = MdIt().use(biblio("test/fixtures/Autocite.bib"));
-const res = mdIt.render(src);
+/* const mdIt = MdIt().use(biblio("test/fixtures/Autocite.bib"));
+const res = mdIt.render(src); */
 //console.log(res);
 
 const vancouver = `<?xml version="1.0" encoding="utf-8"?>
@@ -393,8 +394,15 @@ Here is a citation @chomsky, one with page info (a.k.a locator) @chomsky{p. 4}, 
 Multiple citations: @chomsky{p. 5}; @hermanChomsky; @lafeber{Cf.}{xii}
 `;
 
-const mdIt2 = MdIt().use(biblio("readme.bib"));
+/* const mdIt2 = MdIt().use(biblio("readme.bib"));
 const res2 = mdIt2.render(readmeExample);
 console.log(res2);
 const res3 = mdIt2.render(readmeExampleText);
-console.log(res3);
+console.log(res3); */
+
+const noteIbidXML = readFileSync("note-ibid.csl", "utf-8");
+const noteIbid = parseXml(noteIbidXML) as Style;
+
+const mdIt3 = MdIt().use(biblio("readme.bib", { style: noteIbid }));
+const res4 = mdIt3.render(readmeExample);
+console.log(res4);

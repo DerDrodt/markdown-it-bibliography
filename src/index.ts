@@ -7,6 +7,7 @@ import { STYLES, LOCALES } from "./const.js";
 import { CSLBibliography, Format, Options } from "./types/bibliography.js";
 import citations from "./citations.js";
 import type { Style } from "./types/style";
+import type { Locale } from "./types/locale";
 import type { XMLJson } from "./types/xmljson";
 
 // import MdIt from "markdown-it";
@@ -105,4 +106,4 @@ export default function bibliography(
 
 const parseXml = citeproc.parseXml as (src: string) => XMLJson;
 
-export { parseXml };
+export { parseXml, Style, Locale };

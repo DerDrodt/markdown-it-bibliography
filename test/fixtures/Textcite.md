@@ -1,6 +1,6 @@
 @onFrazer
 @logic{44}
-Example cit: @klein{Siehe _weiter_}{§ 44--48, 113 & 204 für weitere details}
+Example cit: @klein{Siehe}{§ 44--48, 113 & 204 für weitere Details}
 
 @onFrazer; @logic{44}; @klein{Siehe _weiter_}{44--48, 113, 204}; @memoir
 

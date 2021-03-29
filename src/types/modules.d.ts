@@ -72,7 +72,7 @@ declare module "citeproc" {
       citation: Citation,
       citationsPre: CitationIdNoteNumPair,
       citationsPost: CitationIdNoteNumPair,
-    ): [any, [number, string][]];
+    ): [any, [number, string, string][]];
     previewCitationCluster(
       citation: Citation,
       citationsPre: CitationIdNoteNumPair,

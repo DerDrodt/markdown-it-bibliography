@@ -34,25 +34,22 @@ export default function citations(
 
   // Create Citeproc and add items
   const citeproc = new CSL.Engine(sys, style, lang);
+  (citeproc as any).opt.mode = "text";
 
-  const rerenderCitation = (citation: Citation, env: any) => {
-    const citations: Citation[] = env.citations.seen;
-    const index = citations.findIndex(
-      (c) => c.citationID === citation.citationID,
-    );
-    const background = citations.map(
-      (c) => [c.citationID!, c.properties!.noteIndex] as [string, number],
-    );
-
-    if (!env.citations.rendered) {
-      env.citations.rendered = [];
+  const computeAllCitations = (cits: Citation[], env: any) => {
+    const prev: Citation[] = [];
+    env.citations.rendered = {};
+    for (const cit of cits) {
+      const result = citeproc.processCitationCluster(
+        cit,
+        prev.map((c) => [c.citationID!, c.properties!.noteIndex]),
+        [],
+      )[1];
+      for (const [_, str, id] of result) {
+        env.citations.rendered[id] = str;
+      }
+      prev.push(cit);
     }
-    env.citations.rendered[index] = citeproc.previewCitationCluster(
-      citation,
-      background.slice(0, index),
-      background.slice(index),
-      "text",
-    );
   };
 
   const render_citation_auto: Renderer.RenderRule = (
@@ -65,25 +62,15 @@ export default function citations(
     const token = tokens[idx];
     const id = token.meta.id;
     const cit: Citation = env.citations.list[id];
-    if (!env.citations.seen) {
-      env.citations.seen = [];
+    if (!env.citations.rendered) {
       citeproc.updateItems(
         (env.citations.list as Citation[])
           .map((c) => c.citationItems.map((i) => i.id))
           .flat(),
       );
+      computeAllCitations(env.citations.list as Citation[], env);
     }
-    const prev: Citation[] = env.citations.seen;
-    const result = citeproc.processCitationCluster(
-      cit,
-      prev.map((c) => [c.citationID!, c.properties!.noteIndex]),
-      [],
-    );
-
-    env.citations.seen.push(cit);
-    result[1].forEach(([idx]) => rerenderCitation(prev[idx], env));
-
-    return env.citations.rendered[id] as string;
+    return env.citations.rendered[cit.citationID!] as string;
   };
 
   const render_citation_text: Renderer.RenderRule = (
@@ -96,25 +83,16 @@ export default function citations(
     const token = tokens[idx];
     const id = token.meta.id;
     const cit: Citation = env.citations.list[id];
-    if (!env.citations.seen) {
-      env.citations.seen = [];
+    if (!env.citations.rendered) {
       citeproc.updateItems(
         (env.citations.list as Citation[])
           .map((c) => c.citationItems.map((i) => i.id))
           .flat(),
       );
+      computeAllCitations(env.citations.list as Citation[], env);
     }
-    const prev: Citation[] = env.citations.seen;
-    const result = citeproc.processCitationCluster(
-      cit,
-      prev.map((c) => [c.citationID!, c.properties!.noteIndex]),
-      [],
-    );
-
-    env.citations.seen.push(cit);
-    result[1].forEach(([idx]) => rerenderCitation(prev[idx], env));
-
-    return env.citations.rendered[id] as string;
+    console.log(env.citations.rendered[cit.citationID!]);
+    return env.citations.rendered[cit.citationID!] as string;
   };
 
   const renderBibOpen: Renderer.RenderRule = (_a, _b, options) => {
