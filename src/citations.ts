@@ -91,7 +91,9 @@ export default function citations(
       );
       computeAllCitations(env.citations.list as Citation[], env);
     }
-    console.log(env.citations.rendered[cit.citationID!]);
+    if (cit.properties?.isPartOfInTextCitation === true) {
+      return `${env.citations.rendered[cit.citationID!]} `;
+    }
     return env.citations.rendered[cit.citationID!] as string;
   };
 
@@ -162,15 +164,53 @@ export default function citations(
       const token = state.push("citation_text", "", 0);
       token.meta = { id: citeId };
 
-      state.env.citations.list[citeId] = {
-        citationItems: idToKey
-          ? [{ ...citationItem, id: idToKey.get(citationItem.id) }]
-          : [citationItem],
-        properties: {
-          noteIndex: 0,
-          mode: isSuppressedAuthor ? "suppress-author" : "composite",
-        },
-      };
+      const itemId = idToKey ? idToKey.get(citationItem.id)! : citationItem.id;
+      if (isSuppressedAuthor) {
+        state.env.citations.list[citeId] = {
+          citationItems: [
+            { ...citationItem, id: itemId, "suppress-author": true },
+          ],
+          properties: {
+            noteIndex: 0,
+          },
+        };
+      } else {
+        const shouldUseHack =
+          "original-date" in items[itemId] &&
+          items[itemId]["original-date"]["date-parts"].length === 2;
+        state.env.citations.list[citeId] = {
+          citationItems: [
+            {
+              ...citationItem,
+              id: shouldUseHack ? `author_only_${itemId}` : itemId,
+              suffix: undefined,
+              locator: undefined,
+            },
+          ],
+          properties: {
+            noteIndex: 0,
+            mode: "author-only",
+            isPartOfInTextCitation: true,
+          },
+        };
+        const citeId2 = citeId + 1;
+        const token = state.push("citation_text", "", 0);
+        token.meta = { id: citeId2 };
+        state.env.citations.list[citeId2] = {
+          citationItems: [
+            {
+              ...citationItem,
+              id: itemId,
+              "suppress-author": true,
+              prefix: undefined,
+            },
+          ],
+          properties: {
+            noteIndex: 0,
+          },
+        };
+      }
+
       end = afterItem;
 
       state.pos = end;

@@ -28,7 +28,7 @@
     "update-snap": "yarn build && ava -u"
   },
   "dependencies": {
-    "biblatex-csl-converter-ts": "^1.0.4",
+    "biblatex-csl-converter-ts": "^1.1.0",
     "citeproc": "^2.4.59",
     "locale-de-de": "^0.0.2",
     "locale-en-gb": "^0.0.2",

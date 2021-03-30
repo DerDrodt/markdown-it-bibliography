@@ -13,6 +13,7 @@ export interface Citation {
   properties?: {
     noteIndex: number;
     mode?: "author-only" | "suppress-author" | "composite";
+    isPartOfInTextCitation?: boolean;
   };
   citationID?: string;
   sortedItems?: any;

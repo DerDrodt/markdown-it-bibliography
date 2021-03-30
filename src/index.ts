@@ -90,6 +90,22 @@ export default function bibliography(
   const format = getFormat(pathToBib);
   const [csl, idToKey] = getCSLJson(pathToBib, format);
 
+  for (const id in csl) {
+    const entry = csl[id];
+    // ugly hack
+    if (
+      "original-date" in entry &&
+      entry["original-date"]["date-parts"].length === 2
+    ) {
+      const newId = `author_only_${id}`;
+      if (newId in csl)
+        throw new Error(
+          `${newId} and ${id} cannot both be keys when ${id} uses a date range for original-date`,
+        );
+      csl[newId] = { ...entry, "original-date": undefined, id: newId };
+    }
+  }
+
   let cslStyle: Style;
   if (typeof style === "object") cslStyle = style;
   else if (style in STYLES) cslStyle = STYLES[style];
