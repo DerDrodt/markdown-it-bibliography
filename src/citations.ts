@@ -153,7 +153,7 @@ export default function citations(
         max,
         sys,
         defaultLocale,
-        (text) => md.renderInline(text, { ...state.env, disableBib: true }),
+        (text) => md.renderInline(text, { ...state.env.citations, disableBib: true }),
         idToKey,
       );
       if (!possibleCiteItems) return false;
@@ -265,7 +265,7 @@ export default function citations(
           labelEnd,
           sys,
           defaultLocale,
-          (text) => md.renderInline(text, { ...state.env, disableBib: true }),
+          (text) => md.renderInline(text, { ...state.env.citations, disableBib: true }),
           idToKey,
         );
         if (!possibleCiteItems) return false;
